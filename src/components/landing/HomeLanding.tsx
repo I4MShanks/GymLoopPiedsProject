@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Calculator, Dumbbell, Flame, Gift, Play, QrCode, Store, Users } from 'lucide-react';
 import { AnimatedNumber, Blobs, LiveBars, LiveTicker, Reveal, Ring, TiltCard, useLiveValue } from './fx';
+import { FAQ, SeasonCountdown, WeeklyRaid } from './arcade';
 
 const TITLE = ['G', 'Y', 'M', ' ', 'L', 'O', 'O', 'P'];
 
@@ -14,6 +15,7 @@ export const HomeLanding: React.FC<{ go: (p: string) => void }> = ({ go }) => {
       {/* HERO */}
       <section className="relative isolate px-4 sm:px-6 pt-10 pb-16 lg:pt-16">
         <Blobs />
+        <div className="synth-grid" />
         <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-7 text-center lg:text-left">
             <motion.div
@@ -27,7 +29,7 @@ export const HomeLanding: React.FC<{ go: (p: string) => void }> = ({ go }) => {
               </span>
             </motion.div>
 
-            <h1 className="font-display text-7xl sm:text-8xl lg:text-9xl leading-[0.85] tracking-tight text-t-primary text-arcade-shadow mb-6">
+            <h1 className="glitch font-hud font-black text-6xl sm:text-8xl lg:text-9xl leading-[0.9] tracking-tight text-t-primary neon mb-6">
               {TITLE.map((ch, i) => (
                 <motion.span
                   key={i}
@@ -176,6 +178,23 @@ export const HomeLanding: React.FC<{ go: (p: string) => void }> = ({ go }) => {
         </div>
       </section>
 
+      {/* SEASON + RAID */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-20 grid lg:grid-cols-5 gap-6 items-stretch">
+        <Reveal className="lg:col-span-2">
+          <div className="hud-corners h-full rounded-3xl bg-surface border border-line/12 p-6 sm:p-8 sticker-card flex flex-col justify-between gap-6">
+            <div>
+              <p className="font-pixel text-[11px] text-t-coin tracking-widest mb-2">SEASON 2027 · Q1</p>
+              <h3 className="font-display text-2xl sm:text-3xl text-ink mb-2">Season ends in</h3>
+              <p className="text-sm text-ink-3">Finish the season on a streak to unlock the Season Hoodie before it&apos;s gone for good.</p>
+            </div>
+            <SeasonCountdown />
+          </div>
+        </Reveal>
+        <Reveal className="lg:col-span-3" delay={0.1}>
+          <WeeklyRaid />
+        </Reveal>
+      </section>
+
       {/* HOW IT WORKS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-24">
         <Reveal>
@@ -204,6 +223,12 @@ export const HomeLanding: React.FC<{ go: (p: string) => void }> = ({ go }) => {
               </div>
             </Reveal>
           ))}
+        </div>
+        <div className="max-w-3xl mx-auto mt-20">
+          <Reveal>
+            <h2 className="font-display text-4xl text-center text-ink mb-8">Player FAQ</h2>
+          </Reveal>
+          <FAQ />
         </div>
         <Reveal delay={0.2}>
           <div className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-3">

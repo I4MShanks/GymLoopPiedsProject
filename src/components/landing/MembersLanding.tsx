@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowRight, Lock, Play, QrCode, Trophy, Users, Zap } from 'lucide-react';
 import { AnimatedNumber, Blobs, LiveBars, Reveal, TiltCard } from './fx';
+import { Achievements, SpinWheel } from './arcade';
 
 const LOOT = [
   { weeks: 5, emoji: '🔑', name: 'Anodized Keychain' },
@@ -17,6 +18,7 @@ export const MembersLanding: React.FC<{ go: (p: string) => void }> = ({ go }) =>
     <div className="-mx-4 sm:-mx-6">
       <section className="relative isolate px-4 sm:px-6 pt-12 pb-16">
         <Blobs />
+        <div className="synth-grid" />
         <div className="max-w-4xl mx-auto text-center">
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="font-pixel text-xs text-t-primary tracking-widest mb-4">
             P1 · FOR MEMBERS · FREE TO PLAY
@@ -144,6 +146,20 @@ export const MembersLanding: React.FC<{ go: (p: string) => void }> = ({ go }) =>
             ))}
           </TiltCard>
         </Reveal>
+      </section>
+
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
+        <Reveal>
+          <SpinWheel />
+        </Reveal>
+      </section>
+
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
+        <Reveal>
+          <p className="font-pixel text-xs text-t-primary tracking-widest mb-2">ACHIEVEMENTS · TAP TO FLIP</p>
+          <h2 className="font-display text-3xl sm:text-4xl text-ink mb-8">Badges for every habit</h2>
+        </Reveal>
+        <Achievements />
       </section>
 
       {/* INTERACTIVE REWARD TRACK */}

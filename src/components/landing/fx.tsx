@@ -42,7 +42,7 @@ export const AnimatedNumber: React.FC<{ value: number; decimals?: number; prefix
     return () => controls.stop();
   }, [value, inView]);
   return (
-    <span ref={ref} className={`tabular-nums ${className ?? ''}`}>
+    <span ref={ref} className={`font-hud tabular-nums ${className ?? ''}`}>
       {prefix}
       {shown.toLocaleString('en-IN', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}
       {suffix}
@@ -76,7 +76,7 @@ export const TiltCard: React.FC<{ children: React.ReactNode; className?: string;
       whileTap={{ scale: 0.97 }}
       transition={{ type: 'spring', stiffness: 220, damping: 18 }}
       style={{ transformPerspective: 900 }}
-      className={`${className ?? ''} ${onClick ? 'cursor-pointer' : ''}`}
+      className={`hud-corners neon-edge ${className ?? ''} ${onClick ? 'cursor-pointer' : ''}`}
     >
       {children}
     </motion.div>

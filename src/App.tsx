@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Calculator, Camera, Gift, Home, Menu, Moon, Sun, Trophy, Users, X } from 'lucide-react';
 import { useHashRoute } from './lib/router';
@@ -7,6 +7,7 @@ import { HomeLanding } from './components/landing/HomeLanding';
 import { MembersLanding } from './components/landing/MembersLanding';
 import { OwnersLanding } from './components/landing/OwnersLanding';
 import { Calculators } from './components/Calculators';
+import { DailyQuests, LeagueCard, MascotNudge, StreakCalendar, XpGoal } from './components/gamify';
 import {
   INITIAL_BROADCASTS,
   INITIAL_CHALLENGES,
@@ -54,6 +55,25 @@ export default function App() {
   const [path, go] = useHashRoute();
   const [theme, toggleTheme] = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [xpToday, setXpToday] = useState(40);
+
+  // Tap feedback: neon ring burst + tiny haptic on phones
+  useEffect(() => {
+    const onDown = (e: PointerEvent) => {
+      const el = (e.target as HTMLElement | null)?.closest('button, a, [role="button"]');
+      if (!el) return;
+      const b = document.createElement('span');
+      b.className = 'tap-burst';
+      b.style.left = `${e.clientX}px`;
+      b.style.top = `${e.clientY}px`;
+      document.body.appendChild(b);
+      window.setTimeout(() => b.remove(), 600);
+      if (e.pointerType === 'touch') navigator.vibrate?.(8);
+    };
+    window.addEventListener('pointerdown', onDown);
+    return () => window.removeEventListener('pointerdown', onDown);
+  }, []);
+
   const segs = path.split('/').filter(Boolean);
   const page = segs[0] ?? 'home';
   const appMode: AppMode = page === 'app' ? 'member' : page === 'boss' ? 'owner' : 'onboarding';
@@ -199,6 +219,7 @@ export default function App() {
           : m
       )
     );
+    setXpToday((v) => v + 50);
     showToast('Clocked in at Iron Den! +50 XP');
   };
 
@@ -287,7 +308,7 @@ export default function App() {
           <button
             type="button"
             onClick={() => go('/')}
-            className="font-display text-xl tracking-tight text-t-primary text-arcade-shadow-sm whitespace-nowrap shrink-0 cursor-pointer"
+            className="font-hud font-black text-xl tracking-tight text-t-primary neon whitespace-nowrap shrink-0 cursor-pointer"
           >
             GYMLOOP
           </button>
@@ -404,9 +425,9 @@ export default function App() {
       >
         <motion.div
           key={path}
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
+          initial={{ opacity: 0, y: 24, scale: 0.985, filter: 'blur(6px)' }}
+          animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+          transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
         >
         {page === 'home' && <HomeLanding go={go} />}
         {page === 'members' && <MembersLanding go={go} />}
@@ -439,6 +460,11 @@ export default function App() {
         {appMode === 'member' && (
           <>
             {memberTab === 'home' && (
+              <div className="mb-6">
+                <MascotNudge name="Parth" streakWeeks={streakWeeks} thisWeek={thisWeekCount} goal={weeklyGoal} />
+              </div>
+            )}
+            {memberTab === 'home' && (
               <MemberHome
                 memberName="Parth"
                 streakWeeks={streakWeeks}
@@ -453,6 +479,25 @@ export default function App() {
                 onNavigate={setMemberTab}
                 onToggleExercise={handleToggleExercise}
               />
+            )}
+            {memberTab === 'home' && (
+              <section className="mt-8">
+                <p className="font-pixel text-[11px] text-t-primary tracking-widest mb-4">▶ STAY CONSISTENT</p>
+                <div className="grid lg:grid-cols-3 gap-5">
+                  <div className="space-y-5">
+                    <XpGoal xpToday={xpToday} />
+                    <StreakCalendar streakWeeks={streakWeeks} />
+                  </div>
+                  <DailyQuests
+                    onXp={(xp) => {
+                      handleAwardPoints(xp);
+                      setXpToday((v) => v + xp);
+                      showToast(`Chest opened! +${xp} XP`);
+                    }}
+                  />
+                  <LeagueCard myPoints={points} />
+                </div>
+              </section>
             )}
 
             {memberTab === 'workout' && (
@@ -486,6 +531,11 @@ export default function App() {
               />
             )}
 
+            {memberTab === 'board' && (
+              <div className="mb-6 max-w-xl">
+                <LeagueCard myPoints={points} />
+              </div>
+            )}
             {memberTab === 'board' && (
               <LeaderboardView
                 members={syncedLeaderboard}

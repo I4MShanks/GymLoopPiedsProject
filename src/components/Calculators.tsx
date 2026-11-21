@@ -1,10 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Activity, ArrowLeft, Beef, Dumbbell, Flame, FlaskConical, HeartPulse, Ruler, Scale, TrendingUp } from 'lucide-react';
+import { Activity, ArrowLeft, Timer, Beef, Dumbbell, Flame, FlaskConical, HeartPulse, Ruler, Scale, TrendingUp } from 'lucide-react';
 import { AnimatedNumber, Reveal, Ring, TiltCard } from './landing/fx';
+import { RestTimer } from './landing/arcade';
 
 type Sex = 'male' | 'female';
-type CalcId = 'bmi' | 'bmr' | 'protein' | 'whr' | 'bench' | 'intensity' | 'gain' | 'creatine';
+type CalcId = 'bmi' | 'bmr' | 'protein' | 'whr' | 'bench' | 'intensity' | 'gain' | 'creatine' | 'timer';
 
 const CALCS: { id: CalcId; name: string; blurb: string; icon: React.ReactNode }[] = [
   { id: 'bmi', name: 'BMI', blurb: 'Body Mass Index & healthy range', icon: <Scale className="w-6 h-6" /> },
@@ -15,6 +16,7 @@ const CALCS: { id: CalcId; name: string; blurb: string; icon: React.ReactNode }[
   { id: 'intensity', name: 'Exercise Intensity', blurb: 'Heart-rate training zones', icon: <HeartPulse className="w-6 h-6" /> },
   { id: 'gain', name: 'Weight Gain', blurb: 'Calories & time to target weight', icon: <TrendingUp className="w-6 h-6" /> },
   { id: 'creatine', name: 'Creatine', blurb: 'Daily creatine dose', icon: <FlaskConical className="w-6 h-6" /> },
+  { id: 'timer', name: 'Rest Timer', blurb: 'Countdown between sets', icon: <Timer className="w-6 h-6" /> },
 ];
 
 const ACTIVITY = [
@@ -544,6 +546,7 @@ const VIEWS: Record<CalcId, React.FC> = {
   intensity: Intensity,
   gain: Gain,
   creatine: Creatine,
+  timer: RestTimer,
 };
 
 export const Calculators: React.FC<{ active?: string; go: (p: string) => void }> = ({ active, go }) => {
@@ -559,10 +562,10 @@ export const Calculators: React.FC<{ active?: string; go: (p: string) => void }>
               <p className="font-pixel text-xs text-t-primary tracking-widest mb-3">
                 <Activity className="w-4 h-4 inline -mt-1 mr-1" /> TOOLS
               </p>
-              <h1 className="font-display text-4xl sm:text-5xl text-ink mb-3">Fitness calculators</h1>
+              <h1 className="font-hud font-black text-4xl sm:text-5xl text-t-primary neon mb-3">FITNESS TOOLS</h1>
               <p className="text-ink-3 mb-10 max-w-2xl">Quick reference numbers for your training and nutrition. Drag the sliders and the results update live.</p>
             </Reveal>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
               {CALCS.map((c, i) => (
                 <Reveal key={c.id} delay={i * 0.05}>
                   <TiltCard onClick={() => go(`/calculators/${c.id}`)} className="group h-full rounded-3xl bg-surface border border-line/12 p-5 sm:p-6 hover:border-primary/60 sticker-card">
@@ -590,7 +593,7 @@ export const Calculators: React.FC<{ active?: string; go: (p: string) => void }>
             <div className="flex items-center gap-4 mb-7">
               <div className="w-14 h-14 rounded-2xl bg-primary text-onbright flex items-center justify-center">{current.icon}</div>
               <div>
-                <h1 className="font-display text-3xl sm:text-4xl text-ink">{current.name} calculator</h1>
+                <h1 className="font-display text-3xl sm:text-4xl text-ink">{current.id === 'timer' ? current.name : `${current.name} calculator`}</h1>
                 <p className="text-sm text-ink-3">{current.blurb}</p>
               </div>
             </div>

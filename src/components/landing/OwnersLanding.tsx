@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, BarChart3, BellRing, Check, Megaphone, Swords } from 'lucide-react';
 import { AnimatedNumber, Blobs, LiveBars, Reveal, TiltCard } from './fx';
+import { CrowdHeatmap } from './arcade';
 
 const PLANS = [
   { name: 'Starter', price: 999, members: 'Up to 100 members' },
@@ -80,6 +81,12 @@ export const OwnersLanding: React.FC<{ go: (p: string) => void }> = ({ go }) => 
             </TiltCard>
           </Reveal>
         ))}
+      </section>
+
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        <Reveal>
+          <CrowdHeatmap />
+        </Reveal>
       </section>
 
       {/* ROI calculator */}
