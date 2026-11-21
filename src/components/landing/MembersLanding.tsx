@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ArrowRight, Lock, Play, QrCode, Trophy, Users, Zap } from 'lucide-react';
 import { AnimatedNumber, Blobs, LiveBars, Reveal, TiltCard } from './fx';
 import { Achievements, SpinWheel } from './arcade';
+import { PowerUps } from '../gamify';
 
 const LOOT = [
   { weeks: 5, emoji: '🔑', name: 'Anodized Keychain' },
@@ -160,6 +161,13 @@ export const MembersLanding: React.FC<{ go: (p: string) => void }> = ({ go }) =>
           <h2 className="font-display text-3xl sm:text-4xl text-ink mb-8">Badges for every habit</h2>
         </Reveal>
         <Achievements />
+      </section>
+
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
+        <Reveal>
+          <PowerUps streakWeeks={weeks} />
+        </Reveal>
+        <p className="text-xs text-ink-4 text-center mt-3">Drag the streak slider below to see powers unlock.</p>
       </section>
 
       {/* INTERACTIVE REWARD TRACK */}

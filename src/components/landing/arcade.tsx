@@ -126,7 +126,8 @@ export const WeeklyRaid: React.FC = () => {
 const FAQS = [
   ['Is GymLoop free for members?', 'Yes. Gyms pay a monthly plan; members play free.'],
   ['How does the live crowd count work?', 'It counts check-ins at the desk QR, so it reflects people actually inside right now.'],
-  ['What if I miss a week?', 'There are no streak freezes. Finish a few goal weeks in a row to earn your streak back.'],
+  ['What if I miss a week?', 'Use a Streak Freeze. You earn one every 4 streak weeks (hold up to 2). No freeze left? Finish 3 goal weeks in a row to earn the streak back.'],
+  ['What are power-ups?', 'Rewards for keeping your streak: Streak Freezes, Double XP, Guest Passes, Raid Fury and more, unlocked at streak milestones.'],
   ['Can I buy the merch?', 'Never. Keychains, tees and hoodies are only unlocked by showing up.'],
   ['Does it work with any gym?', 'Any independent gym can join. The owner sets it up and prints the desk QR.'],
 ];

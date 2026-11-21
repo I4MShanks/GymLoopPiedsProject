@@ -178,7 +178,7 @@ export const LootAndProfile: React.FC<LootAndProfileProps> = ({
 
           {/* Earn It Back Rule */}
           <div className="mt-6 rounded-2xl bg-coin/8 border border-coin/45 p-4 text-xs sm:text-sm text-ink-2 leading-relaxed">
-            <strong className="text-t-coin">Missed a week?</strong> No freezes — finish 3 goal
+            <strong className="text-t-coin">Missed a week?</strong> Use a 🧊 Streak Freeze, or finish 3 goal
             weeks to earn your streak back.
           </div>
         </div>

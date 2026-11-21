@@ -7,7 +7,7 @@ import { HomeLanding } from './components/landing/HomeLanding';
 import { MembersLanding } from './components/landing/MembersLanding';
 import { OwnersLanding } from './components/landing/OwnersLanding';
 import { Calculators } from './components/Calculators';
-import { DailyQuests, LeagueCard, MascotNudge, StreakCalendar, XpGoal } from './components/gamify';
+import { DailyQuests, LeagueCard, MascotNudge, PowerUps, StreakCalendar, XpGoal } from './components/gamify';
 import {
   INITIAL_BROADCASTS,
   INITIAL_CHALLENGES,
@@ -497,6 +497,9 @@ export default function App() {
                   />
                   <LeagueCard myPoints={points} />
                 </div>
+                <div className="mt-5">
+                  <PowerUps streakWeeks={streakWeeks} onUse={showToast} />
+                </div>
               </section>
             )}
 
@@ -544,6 +547,11 @@ export default function App() {
               />
             )}
 
+            {(memberTab === 'loot' || memberTab === 'profile') && (
+              <div className="mb-6">
+                <PowerUps streakWeeks={streakWeeks} onUse={showToast} />
+              </div>
+            )}
             {(memberTab === 'loot' || memberTab === 'profile') && (
               <LootAndProfile
                 initialSection={memberTab === 'profile' ? 'profile' : 'loot'}

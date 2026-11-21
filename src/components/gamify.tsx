@@ -94,6 +94,7 @@ export const MascotNudge: React.FC<{ name: string; streakWeeks: number; thisWeek
     if (hour >= 13 && hour < 16) l.push({ t: 'Iron Den is chill right now. Perfect time for a session 😌', mood: 'happy' });
     if (hour >= 17 && hour < 20) l.push({ t: 'Rush hour! Go after 8 PM for free benches.', mood: 'happy' });
     l.push({ t: 'Finish all 3 daily quests to open today’s chest 🎁', mood: 'happy' });
+    l.push({ t: `You've got ${Math.min(2, Math.floor(streakWeeks / 4))} Streak Freeze${Math.min(2, Math.floor(streakWeeks / 4)) === 1 ? '' : 's'} 🧊 ready. Your streak is protected!`, mood: 'happy' });
     l.push({ t: `You're 8 weeks from the Loop Tee. Keep showing up!`, mood: 'hype' });
     return l;
   }, [name, streakWeeks, left, hour]);
@@ -296,7 +297,7 @@ export const StreakCalendar: React.FC<{ streakWeeks: number }> = ({ streakWeeks 
         })}
       </div>
       <p className="text-xs text-ink-4 mt-4 flex items-center gap-1.5">
-        <Shield className="w-3.5 h-3.5" /> No streak freezes. Miss a week? Finish 3 goal weeks in a row to earn it back.
+        <Shield className="w-3.5 h-3.5" /> {freezesEarned(streakWeeks)} streak freeze{freezesEarned(streakWeeks) === 1 ? '' : 's'} equipped. Miss a week and one is used automatically.
       </p>
     </div>
   );
@@ -379,6 +380,181 @@ export const LeagueCard: React.FC<{ myPoints: number }> = ({ myPoints }) => {
         })}
       </div>
       <p className="text-xs text-ink-4 mt-3">Top 4 move up to Diamond on Monday. Bottom 3 drop to Gold.</p>
+    </div>
+  );
+};
+
+/* ---------------- Power-ups earned by keeping the streak ---------------- */
+type Power = {
+  id: string;
+  e: string;
+  n: string;
+  d: string;
+  at: number; // streak weeks needed
+  kind: 'stack' | 'timed' | 'single' | 'passive';
+  max?: number;
+};
+
+export const POWERS: Power[] = [
+  { id: 'freeze', e: '🧊', n: 'Streak Freeze', d: 'Covers one missed week so your streak survives. Earn 1 every 4 weeks, hold up to 2.', at: 4, kind: 'stack', max: 2 },
+  { id: 'double', e: '⚡', n: 'Double XP', d: '2× XP on everything for 24 hours.', at: 6, kind: 'timed' },
+  { id: 'guest', e: '🎟️', n: 'Guest Pass', d: 'Bring a friend for a free session. Both of you get +50 XP.', at: 8, kind: 'single' },
+  { id: 'comeback', e: '🔄', n: 'Comeback Boost', d: 'Lost a streak? Earn it back in 2 goal weeks instead of 3.', at: 10, kind: 'passive' },
+  { id: 'fury', e: '⚔️', n: 'Raid Fury', d: 'Deal 2× damage in this week’s raid.', at: 12, kind: 'timed' },
+  { id: 'radar', e: '📡', n: 'Crowd Radar Pro', d: 'Get a ping the moment your gym drops below 30% full.', at: 15, kind: 'passive' },
+  { id: 'magnet', e: '🧲', n: 'XP Magnet', d: 'Permanent +10% XP on every check-in.', at: 20, kind: 'passive' },
+];
+
+export const freezesEarned = (streakWeeks: number) => Math.min(2, Math.floor(streakWeeks / 4));
+
+export const PowerUps: React.FC<{ streakWeeks: number; onUse?: (msg: string) => void; compact?: boolean }> = ({ streakWeeks, onUse, compact }) => {
+  const [freezes, setFreezes] = useState(() => freezesEarned(streakWeeks));
+  const [used, setUsed] = useState<Record<string, boolean>>({});
+  const [active, setActive] = useState<Record<string, number>>({}); // id -> ends at (ms)
+  const [now, setNow] = useState(Date.now());
+  const [burst, setBurst] = useState<string | null>(null);
+  useEffect(() => {
+    const t = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(t);
+  }, []);
+  useEffect(() => setFreezes(freezesEarned(streakWeeks)), [streakWeeks]);
+  const next = POWERS.find((p) => p.at > streakWeeks);
+
+  const use = (p: Power) => {
+    if (p.kind === 'stack') {
+      if (freezes <= 0) return;
+      setFreezes((f) => f - 1);
+      onUse?.('🧊 Streak Freeze used. Your streak is safe this week.');
+    } else if (p.kind === 'timed') {
+      setActive((a) => ({ ...a, [p.id]: Date.now() + 24 * 3600 * 1000 }));
+      onUse?.(`${p.e} ${p.n} activated for 24 hours!`);
+    } else if (p.kind === 'single') {
+      setUsed((u) => ({ ...u, [p.id]: true }));
+      onUse?.(`${p.e} ${p.n} sent! Share the code at the desk.`);
+    }
+    setBurst(p.id);
+    window.setTimeout(() => setBurst(null), 900);
+    navigator.vibrate?.([20, 30, 40]);
+  };
+
+  const fmt = (ms: number) => {
+    const s = Math.max(0, Math.floor(ms / 1000));
+    return `${Math.floor(s / 3600)}h ${String(Math.floor((s % 3600) / 60)).padStart(2, '0')}m ${String(s % 60).padStart(2, '0')}s`;
+  };
+
+  return (
+    <div className="hud-corners rounded-3xl bg-surface border border-line/12 p-5 sm:p-6">
+      <div className="flex flex-wrap items-end justify-between gap-3 mb-5">
+        <div>
+          <p className="font-pixel text-[11px] text-t-primary tracking-widest mb-1">POWER-UPS</p>
+          <h3 className="font-display text-2xl text-ink">Keep the streak, unlock powers</h3>
+        </div>
+        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-base border border-sky/40">
+          <span className="text-xl">🧊</span>
+          <span className="font-hud text-sm text-t-sky">
+            {freezes}/2 FREEZES EQUIPPED
+          </span>
+        </div>
+      </div>
+
+      {next && (
+        <div className="mb-5">
+          <div className="flex justify-between text-xs mb-1.5">
+            <span className="text-ink-3">
+              Next power: <b className="text-ink">{next.e} {next.n}</b>
+            </span>
+            <span className="font-hud text-t-primary">
+              {streakWeeks}/{next.at} WKS
+            </span>
+          </div>
+          <div className="h-3 rounded-full bg-base border border-line/10 overflow-hidden">
+            <motion.div
+              className="h-full rounded-full bg-gradient-to-r from-accent via-primary to-sky"
+              initial={{ width: 0 }}
+              animate={{ width: `${(streakWeeks / next.at) * 100}%` }}
+              transition={{ type: 'spring', stiffness: 90, damping: 18 }}
+            />
+          </div>
+        </div>
+      )}
+
+      <div className={`grid gap-3 ${compact ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'}`}>
+        {POWERS.map((p, i) => {
+          const unlocked = streakWeeks >= p.at;
+          const endsAt = active[p.id];
+          const isActive = !!endsAt && endsAt > now;
+          const canUse =
+            unlocked &&
+            ((p.kind === 'stack' && freezes > 0) || (p.kind === 'timed' && !isActive) || (p.kind === 'single' && !used[p.id]));
+          return (
+            <motion.div
+              key={p.id}
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.05 }}
+              className={`relative rounded-2xl border-2 p-4 flex flex-col overflow-hidden ${
+                isActive
+                  ? 'border-coin bg-raised shadow-[0_0_28px_-6px_var(--color-coin)]'
+                  : unlocked
+                    ? 'border-primary/70 bg-raised'
+                    : 'border-line/10 bg-base'
+              }`}
+            >
+              {unlocked && !isActive && (
+                <motion.div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{ background: 'radial-gradient(circle at 30% 20%, color-mix(in oklab, var(--color-primary) 25%, transparent), transparent 60%)' }}
+                  animate={{ opacity: [0.4, 0.9, 0.4] }}
+                  transition={{ duration: 2.4, repeat: Infinity }}
+                />
+              )}
+              <AnimatePresence>
+                {burst === p.id && (
+                  <motion.span
+                    className="absolute inset-0 m-auto w-16 h-16 rounded-full border-4 border-primary pointer-events-none"
+                    initial={{ scale: 0.3, opacity: 1 }}
+                    animate={{ scale: 3.5, opacity: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.8 }}
+                  />
+                )}
+              </AnimatePresence>
+              <div className="relative flex items-start justify-between mb-2">
+                <motion.span
+                  className={`text-3xl ${unlocked ? '' : 'grayscale opacity-40'}`}
+                  animate={isActive ? { rotate: [0, -10, 10, 0], scale: [1, 1.15, 1] } : {}}
+                  transition={{ duration: 1, repeat: isActive ? Infinity : 0, repeatDelay: 1 }}
+                >
+                  {p.e}
+                </motion.span>
+                <span className={`font-pixel text-[9px] px-2 py-1 rounded-md ${unlocked ? 'bg-primary text-onbright' : 'bg-void/50 text-ink-5'}`}>
+                  {unlocked ? (p.kind === 'stack' ? `×${freezes}` : p.kind === 'passive' ? 'ALWAYS ON' : 'READY') : `${p.at} WKS`}
+                </span>
+              </div>
+              <div className="relative text-sm font-bold text-ink mb-1">{p.n}</div>
+              <p className="relative text-[11px] leading-snug text-ink-3 flex-1">{p.d}</p>
+              {isActive ? (
+                <div className="relative mt-3 font-hud text-[11px] text-t-coin">ACTIVE · {fmt(endsAt - now)}</div>
+              ) : unlocked && p.kind !== 'passive' ? (
+                <button
+                  type="button"
+                  onClick={() => use(p)}
+                  disabled={!canUse}
+                  className="relative mt-3 min-h-[38px] rounded-xl bg-primary hover:bg-primary-hi disabled:bg-void/40 disabled:text-ink-5 text-onbright text-xs font-bold cursor-pointer disabled:cursor-not-allowed"
+                >
+                  {p.kind === 'stack' ? (freezes > 0 ? 'Use freeze' : 'None left') : p.kind === 'single' ? (used[p.id] ? 'Used' : 'Send pass') : 'Activate'}
+                </button>
+              ) : !unlocked ? (
+                <div className="relative mt-3 h-1.5 rounded-full bg-void/40 overflow-hidden">
+                  <div className="h-full bg-primary/70" style={{ width: `${Math.min(100, (streakWeeks / p.at) * 100)}%` }} />
+                </div>
+              ) : null}
+            </motion.div>
+          );
+        })}
+      </div>
+      <p className="text-[11px] text-ink-5 mt-4">Freezes are used automatically if you miss your weekly goal. You can also use one now if you know you&apos;ll be away.</p>
     </div>
   );
 };
