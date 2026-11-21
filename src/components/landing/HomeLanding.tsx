@@ -13,7 +13,7 @@ export const HomeLanding: React.FC<{ go: (p: string) => void }> = ({ go }) => {
   return (
     <div className="-mx-4 sm:-mx-6">
       {/* HERO */}
-      <section className="relative isolate px-4 sm:px-6 pt-10 pb-16 lg:pt-16">
+      <section className="relative isolate overflow-hidden px-4 sm:px-6 pt-10 pb-16 lg:pt-16">
         <Blobs />
         <div className="synth-grid" />
         <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-12 items-center">

@@ -17,7 +17,7 @@ export const MembersLanding: React.FC<{ go: (p: string) => void }> = ({ go }) =>
 
   return (
     <div className="-mx-4 sm:-mx-6">
-      <section className="relative isolate px-4 sm:px-6 pt-12 pb-16">
+      <section className="relative isolate overflow-hidden px-4 sm:px-6 pt-12 pb-16">
         <Blobs />
         <div className="synth-grid" />
         <div className="max-w-4xl mx-auto text-center">
