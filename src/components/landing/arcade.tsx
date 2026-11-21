@@ -364,7 +364,7 @@ export const RestTimer: React.FC = () => {
                 total === s ? 'bg-primary text-onbright' : 'bg-base border border-line/12 text-ink-2 hover:border-primary/60'
               }`}
             >
-              {s < 60 ? `${s}s` : `${s / 60}${s % 60 ? '.5' : ''}m`}
+              {s < 60 ? `${s}s` : `${s / 60}m`}
             </button>
           ))}
         </div>
