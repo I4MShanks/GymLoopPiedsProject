@@ -1,0 +1,6 @@
+{
+  "name": "GymLoop",
+  "description": "See the crowd. Show up more. Earn it. Arcade-meets-streetwear gym streak, live crowd tracker, rotating QR check-in, merch reward track, and owner retention dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

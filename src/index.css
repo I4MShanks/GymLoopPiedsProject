@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Archivo Black", sans-serif;
+  --font-pixel: "Silkscreen", monospace;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-void: #0B0A1F;
+  --color-surface: #13122E;
+  --color-surface-elevated: #1A183D;
+  --color-xp-green: #39FF88;
+  --color-hot-pink: #FF3DA8;
+  --color-coin: #FFD23F;
+  --color-cyan: #3DD6FF;
+  --color-grape: #8B5CFF;
+}
+
+@layer base {
+  html {
+    background-color: #0B0A1F;
+    color: #F8FAFC;
+    font-family: var(--font-sans);
+  }
+}
+
+.bg-arcade-grid {
+  background-color: #0B0A1F;
+  background-image:
+    radial-gradient(circle at 15% 15%, rgba(255, 61, 168, 0.16) 0%, transparent 42%),
+    radial-gradient(circle at 85% 85%, rgba(57, 255, 136, 0.13) 0%, transparent 45%),
+    radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 24px 24px;
+}
+
+.text-arcade-shadow {
+  text-shadow: 3px 3px 0px #FF3DA8;
+}
+
+.text-arcade-shadow-sm {
+  text-shadow: 2px 2px 0px #FF3DA8;
+}
+
+.sticker-green {
+  box-shadow: 4px 4px 0px #FF3DA8;
+}
+
+.sticker-pink {
+  box-shadow: 4px 4px 0px #39FF88;
+}
+
+.sticker-gold {
+  box-shadow: 4px 4px 0px #8B5CFF;
+}
+
+.sticker-cyan {
+  box-shadow: 4px 4px 0px #FF3DA8;
+}
+
+.sticker-card {
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.65);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom sleek scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B0A1F;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 255, 0.35);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 61, 168, 0.6);
+}
