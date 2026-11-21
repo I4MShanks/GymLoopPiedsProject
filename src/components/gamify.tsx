@@ -397,10 +397,7 @@ type Power = {
 
 export const POWERS: Power[] = [
   { id: 'freeze', e: '🧊', n: 'Streak Freeze', d: 'Covers one missed week so your streak survives. Earn 1 every 4 weeks, hold up to 2.', at: 4, kind: 'stack', max: 2 },
-  { id: 'double', e: '⚡', n: 'Double XP', d: '2× XP on everything for 24 hours.', at: 6, kind: 'timed' },
-  { id: 'guest', e: '🎟️', n: 'Guest Pass', d: 'Bring a friend for a free session. Both of you get +50 XP.', at: 8, kind: 'single' },
   { id: 'comeback', e: '🔄', n: 'Comeback Boost', d: 'Lost a streak? Earn it back in 2 goal weeks instead of 3.', at: 10, kind: 'passive' },
-  { id: 'fury', e: '⚔️', n: 'Raid Fury', d: 'Deal 2× damage in this week’s raid.', at: 12, kind: 'timed' },
   { id: 'radar', e: '📡', n: 'Crowd Radar Pro', d: 'Get a ping the moment your gym drops below 30% full.', at: 15, kind: 'passive' },
   { id: 'magnet', e: '🧲', n: 'XP Magnet', d: 'Permanent +10% XP on every check-in.', at: 20, kind: 'passive' },
 ];
