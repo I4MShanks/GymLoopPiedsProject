@@ -21,8 +21,15 @@
       href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Silkscreen:wght@400;700&display=swap"
       rel="stylesheet"
     />
+    <meta name="theme-color" content="#03045E" />
+    <script>
+      try {
+        var t = localStorage.getItem('gymloop-theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.className = t;
+      } catch (e) {}
+    </script>
   </head>
-  <body class="bg-[#0B0A1F] text-white antialiased selection:bg-[#FF3DA8] selection:text-white">
+  <body class="bg-void text-ink antialiased selection:bg-primary selection:text-onbright">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

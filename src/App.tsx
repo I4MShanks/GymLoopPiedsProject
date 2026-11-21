@@ -1,5 +1,12 @@
 import React, { useMemo, useState } from 'react';
-import { Camera, Gift, Home, Trophy, Users } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { Calculator, Camera, Gift, Home, Menu, Moon, Sun, Trophy, Users, X } from 'lucide-react';
+import { useHashRoute } from './lib/router';
+import { useTheme } from './lib/theme';
+import { HomeLanding } from './components/landing/HomeLanding';
+import { MembersLanding } from './components/landing/MembersLanding';
+import { OwnersLanding } from './components/landing/OwnersLanding';
+import { Calculators } from './components/Calculators';
 import {
   INITIAL_BROADCASTS,
   INITIAL_CHALLENGES,
@@ -43,10 +50,19 @@ const MOBILE_BOTTOM_TABS: { id: MemberTab; label: string; icon: React.ReactNode 
 ];
 
 export default function App() {
-  // Core Mode & Navigation
-  const [appMode, setAppMode] = useState<AppMode>('onboarding');
-  const [onboardingStep, setOnboardingStep] = useState<OnboardingStep>('splash');
-  const [memberTab, setMemberTab] = useState<MemberTab>('home');
+  // Routing (each page has its own URL)
+  const [path, go] = useHashRoute();
+  const [theme, toggleTheme] = useTheme();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const segs = path.split('/').filter(Boolean);
+  const page = segs[0] ?? 'home';
+  const appMode: AppMode = page === 'app' ? 'member' : page === 'boss' ? 'owner' : 'onboarding';
+  const VALID_TABS: MemberTab[] = ['home', 'workout', 'crowd', 'checkin', 'board', 'loot', 'profile'];
+  const memberTab: MemberTab = VALID_TABS.includes(segs[1] as MemberTab) ? (segs[1] as MemberTab) : 'home';
+  const setMemberTab = (t: MemberTab) => go(`/app/${t}`);
+  const setAppMode = (m: AppMode) => go(m === 'member' ? '/app/home' : m === 'owner' ? '/boss' : '/');
+  const onboardingStep: OnboardingStep = 'goal';
+  const setOnboardingStep = (st: OnboardingStep) => go(st === 'splash' ? '/members' : '/join');
 
   // Onboarding / Member Preferences
   const [weeklyGoal, setWeeklyGoal] = useState<3 | 4>(4);
@@ -264,154 +280,141 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-arcade-grid text-white flex flex-col">
-      {/* 3-Zone Top Bar */}
-      <header className="sticky top-0 z-40 h-16 bg-[#0B0A1F]/85 backdrop-blur-md border-b border-white/10">
-        <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 flex items-center justify-between gap-8">
-          {/* Zone 1: Single text brand wordmark */}
+    <div className="min-h-screen bg-arcade-grid text-ink flex flex-col">
+      {/* Top bar */}
+      <header className="sticky top-0 z-40 h-16 bg-void/80 backdrop-blur-xl border-b border-line/10">
+        <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 flex items-center justify-between gap-6">
           <button
             type="button"
-            onClick={() => {
-              setAppMode('onboarding');
-              setOnboardingStep('splash');
-            }}
-            className="font-display text-xl tracking-tight text-[#39FF88] text-arcade-shadow-sm whitespace-nowrap shrink-0 cursor-pointer"
+            onClick={() => go('/')}
+            className="font-display text-xl tracking-tight text-t-primary text-arcade-shadow-sm whitespace-nowrap shrink-0 cursor-pointer"
           >
             GYMLOOP
           </button>
 
-          {/* Zone 2: Clean single-line navigation links */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
-            {appMode === 'member' ? (
-              <>
-                <button
-                  type="button"
-                  onClick={() => setMemberTab('home')}
-                  className={`whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-                    memberTab === 'home' ? 'text-[#39FF88] font-semibold' : 'hover:text-white'
-                  }`}
-                >
-                  Home
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMemberTab('workout')}
-                  className={`whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-                    memberTab === 'workout' ? 'text-[#39FF88] font-semibold' : 'hover:text-white'
-                  }`}
-                >
-                  Workout
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMemberTab('crowd')}
-                  className={`whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-                    memberTab === 'crowd' ? 'text-[#39FF88] font-semibold' : 'hover:text-white'
-                  }`}
-                >
-                  Crowd
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMemberTab('board')}
-                  className={`whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-                    memberTab === 'board' ? 'text-[#39FF88] font-semibold' : 'hover:text-white'
-                  }`}
-                >
-                  Leaderboard
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMemberTab('loot')}
-                  className={`whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-                    memberTab === 'loot' || memberTab === 'profile'
-                      ? 'text-[#39FF88] font-semibold'
-                      : 'hover:text-white'
-                  }`}
-                >
-                  Loot
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAppMode('onboarding');
-                    setOnboardingStep('splash');
-                  }}
-                  className={`whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-                    appMode === 'onboarding' ? 'text-[#39FF88] font-semibold' : 'hover:text-white'
-                  }`}
-                >
-                  Onboarding
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAppMode('member');
-                    setMemberTab('home');
-                  }}
-                  className="whitespace-nowrap shrink-0 hover:text-white transition-colors cursor-pointer"
-                >
-                  Member App
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAppMode('member');
-                    setMemberTab('crowd');
-                  }}
-                  className="whitespace-nowrap shrink-0 hover:text-white transition-colors cursor-pointer"
-                >
-                  Live Crowd
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAppMode('owner')}
-                  className={`whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-                    appMode === 'owner' ? 'text-[#39FF88] font-semibold' : 'hover:text-white'
-                  }`}
-                >
-                  Boss Mode
-                </button>
-              </>
-            )}
+          <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-ink-3">
+            {(appMode === 'member'
+              ? [
+                  { to: '/app/home', label: 'Home', on: memberTab === 'home' },
+                  { to: '/app/workout', label: 'Workout', on: memberTab === 'workout' },
+                  { to: '/app/crowd', label: 'Crowd', on: memberTab === 'crowd' },
+                  { to: '/app/checkin', label: 'Check-in', on: memberTab === 'checkin' },
+                  { to: '/app/board', label: 'Leaderboard', on: memberTab === 'board' },
+                  { to: '/app/loot', label: 'Loot', on: memberTab === 'loot' || memberTab === 'profile' },
+                  { to: '/calculators', label: 'Calculators', on: false },
+                ]
+              : [
+                  { to: '/', label: 'Home', on: page === 'home' },
+                  { to: '/members', label: 'For Members', on: page === 'members' || page === 'join' },
+                  { to: '/owners', label: 'For Gym Owners', on: page === 'owners' || page === 'boss' },
+                  { to: '/calculators', label: 'Calculators', on: page === 'calculators' },
+                  { to: '/app/home', label: 'Demo App', on: false },
+                ]
+            ).map((l) => (
+              <button
+                key={l.to}
+                type="button"
+                onClick={() => go(l.to)}
+                className={`relative px-3.5 py-2 rounded-full whitespace-nowrap cursor-pointer ${l.on ? 'text-onbright font-semibold' : 'hover:text-ink'}`}
+              >
+                {l.on && (
+                  <motion.span layoutId="nav-pill" className="absolute inset-0 rounded-full bg-primary" transition={{ type: 'spring', stiffness: 380, damping: 30 }} />
+                )}
+                <span className="relative">{l.label}</span>
+              </button>
+            ))}
           </nav>
 
-          {/* Zone 3: 1 Primary Action */}
-          <div className="shrink-0">
-            {appMode === 'owner' ? (
-              <button
-                type="button"
-                onClick={() => {
-                  setAppMode('member');
-                  setMemberTab('home');
-                }}
-                className="min-h-[40px] px-4 py-2 rounded-xl bg-[#FF3DA8] hover:bg-[#FF55B3] text-white text-xs font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer"
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Switch to day mode' : 'Switch to night mode'}
+              className="relative w-16 h-9 rounded-full bg-surface border border-line/20 cursor-pointer overflow-hidden"
+            >
+              <motion.span
+                className="absolute top-1 w-7 h-7 rounded-full bg-primary text-onbright flex items-center justify-center"
+                animate={{ left: theme === 'dark' ? 4 : 32, rotate: theme === 'dark' ? 0 : 180 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 26 }}
               >
-                Member App
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setAppMode('owner')}
-                className="min-h-[40px] px-4 py-2 rounded-xl bg-[#161436] hover:bg-[#211E4F] border border-[#FFD23F]/50 text-[#FFD23F] text-xs font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer"
-              >
-                Boss Mode
-              </button>
-            )}
+                {theme === 'dark' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+              </motion.span>
+            </button>
+            <button
+              type="button"
+              onClick={() => go(appMode === 'owner' ? '/app/home' : '/boss')}
+              className={`hidden sm:inline-flex min-h-[38px] px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap cursor-pointer ${
+                appMode === 'owner' ? 'bg-accent hover:bg-accent-hi text-white' : 'bg-surface hover:bg-raised border border-coin/60 text-t-coin'
+              }`}
+            >
+              {appMode === 'owner' ? 'Member App' : 'Boss Mode'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setMenuOpen((o) => !o)}
+              aria-label="Menu"
+              className="md:hidden w-10 h-10 rounded-xl bg-surface border border-line/15 flex items-center justify-center text-ink cursor-pointer"
+            >
+              {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
+
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="md:hidden absolute top-16 left-0 right-0 bg-void/95 backdrop-blur-xl border-b border-line/10 px-4 py-3 flex flex-col gap-1"
+            >
+              {[
+                ['/', 'Home'],
+                ['/members', 'For Members'],
+                ['/owners', 'For Gym Owners'],
+                ['/calculators', 'Calculators'],
+                ['/app/home', 'Member App'],
+                ['/boss', 'Boss Mode'],
+              ].map(([to, label], i) => (
+                <motion.button
+                  key={to}
+                  type="button"
+                  initial={{ opacity: 0, x: -12 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.04 }}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    go(to);
+                  }}
+                  className="text-left min-h-[46px] px-4 rounded-xl text-ink-2 hover:bg-surface font-medium cursor-pointer"
+                >
+                  {label}
+                </motion.button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       {/* Main Content Area */}
       <div
         className={`flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 ${
-          appMode === 'member' ? 'pt-6 pb-24 md:pb-10' : 'py-6'
+          appMode === 'member' ? 'pt-6 pb-24 md:pb-10' : ['home', 'members', 'owners'].includes(page) ? 'pb-6' : 'py-6'
         }`}
       >
-        {appMode === 'onboarding' && (
+        <AnimatePresence mode="wait">
+        <motion.div
+          key={path}
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -12 }}
+          transition={{ duration: 0.32, ease: [0.2, 0.8, 0.2, 1] }}
+        >
+        {page === 'home' && <HomeLanding go={go} />}
+        {page === 'members' && <MembersLanding go={go} />}
+        {page === 'owners' && <OwnersLanding go={go} />}
+        {page === 'calculators' && <Calculators active={segs[1]} go={go} />}
+        {page === 'join' && (
           <MemberOnboarding
             step={onboardingStep}
             setStep={setOnboardingStep}
@@ -424,6 +427,15 @@ export default function App() {
             onComplete={handleCompleteOnboarding}
             onOpenOwnerMode={() => setAppMode('owner')}
           />
+        )}
+        {!['home', 'members', 'owners', 'calculators', 'join', 'app', 'boss'].includes(page) && (
+          <div className="py-32 text-center">
+            <p className="font-display text-6xl text-t-primary mb-4">404</p>
+            <p className="text-ink-3 mb-6">This level doesn&apos;t exist.</p>
+            <button type="button" onClick={() => go('/')} className="px-6 py-3 rounded-xl bg-primary text-onbright font-bold cursor-pointer">
+              Back to start
+            </button>
+          </div>
         )}
 
         {appMode === 'member' && (
@@ -517,13 +529,15 @@ export default function App() {
             onSendBroadcast={handleSendBroadcast}
           />
         )}
+        </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Mobile Fixed 5-Tab Bottom Bar (Member App) - obeys <=15% sticky height & >=44px touch targets */}
       {appMode === 'member' && (
         <nav
           aria-label="Member navigation"
-          className="md:hidden fixed bottom-0 left-0 right-0 z-40 h-16 bg-[#0E0D26]/95 backdrop-blur-md border-t border-white/10 grid grid-cols-5 items-center px-1"
+          className="md:hidden fixed bottom-0 left-0 right-0 z-40 h-16 bg-base/95 backdrop-blur-md border-t border-line/10 grid grid-cols-5 items-center px-1"
         >
           {MOBILE_BOTTOM_TABS.map((tab) => {
             const active =
@@ -536,11 +550,14 @@ export default function App() {
                 key={tab.id}
                 type="button"
                 onClick={() => setMemberTab(tab.id)}
-                className={`min-h-[48px] flex flex-col items-center justify-center gap-0.5 transition-colors cursor-pointer ${
-                  active ? 'text-[#39FF88]' : 'text-slate-400 hover:text-white'
+                className={`relative min-h-[48px] flex flex-col items-center justify-center gap-0.5 transition-colors cursor-pointer ${
+                  active ? 'text-t-primary' : 'text-ink-4 hover:text-ink'
                 }`}
               >
-                {tab.icon}
+                {active && (
+                  <motion.span layoutId="tab-glow" className="absolute top-1 w-10 h-1 rounded-full bg-primary" transition={{ type: 'spring', stiffness: 400, damping: 30 }} />
+                )}
+                <motion.span animate={{ y: active ? -2 : 0, scale: active ? 1.12 : 1 }}>{tab.icon}</motion.span>
                 <span className="text-[10px] font-semibold tracking-tight">{tab.label}</span>
               </button>
             );
@@ -548,15 +565,21 @@ export default function App() {
         </nav>
       )}
 
-      {/* Subtle Toast Notification */}
-      {toastMsg && (
-        <div
-          role="status"
-          className="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-50 px-4 py-3 rounded-2xl bg-[#161436] border border-[#39FF88] text-xs font-bold text-[#39FF88] shadow-xl"
-        >
-          {toastMsg}
-        </div>
-      )}
+      <AnimatePresence>
+        {toastMsg && (
+          <motion.div
+            key={toastMsg}
+            role="status"
+            initial={{ opacity: 0, y: 24, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 12, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 380, damping: 26 }}
+            className="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-50 px-4 py-3 rounded-2xl bg-surface border border-primary text-xs font-bold text-t-primary shadow-xl"
+          >
+            {toastMsg}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

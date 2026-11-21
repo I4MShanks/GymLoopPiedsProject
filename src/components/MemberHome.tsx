@@ -34,10 +34,10 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
   const occupancyPct = Math.min(100, Math.round((peopleInside / capacity) * 100));
   const crowdStatus =
     occupancyPct < 45
-      ? { label: 'CHILL', emoji: '😌', color: '#39FF88' }
+      ? { label: 'CHILL', emoji: '😌', color: 'var(--color-primary)' }
       : occupancyPct < 75
-        ? { label: 'BUSY', emoji: '😤', color: '#FFD23F' }
-        : { label: 'PACKED', emoji: '🔥', color: '#FF3DA8' };
+        ? { label: 'BUSY', emoji: '😤', color: 'var(--color-coin)' }
+        : { label: 'PACKED', emoji: '🔥', color: 'var(--color-accent)' };
 
   const completedMoves = exercises.filter((e) => e.completed).length;
   const weeksToTee = Math.max(0, 20 - streakWeeks);
@@ -50,8 +50,8 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
       {/* Greeting Header */}
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="text-sm text-slate-300 font-medium">yo {memberName} 👋</p>
-          <h1 className="font-display text-3xl sm:text-4xl text-white tracking-tight">
+          <p className="text-sm text-ink-3 font-medium">yo {memberName} 👋</p>
+          <h1 className="font-display text-3xl sm:text-4xl text-ink tracking-tight">
             Let&apos;s get it.
           </h1>
         </div>
@@ -59,9 +59,9 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
           type="button"
           onClick={() => onNavigate('profile')}
           aria-label="Open player profile"
-          className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FF3DA8] to-[#8B5CFF] p-[2px] hover:scale-105 transition-transform cursor-pointer shrink-0"
+          className="w-12 h-12 rounded-2xl bg-gradient-to-br from-accent to-grape p-[2px] hover:scale-105 transition-transform cursor-pointer shrink-0"
         >
-          <div className="w-full h-full rounded-[14px] bg-[#161436] flex items-center justify-center text-2xl">
+          <div className="w-full h-full rounded-[14px] bg-surface flex items-center justify-center text-2xl">
             😎
           </div>
         </button>
@@ -69,20 +69,20 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
 
       {/* Optional Broadcast Banner from Owner Boss Mode */}
       {latestBroadcast && (
-        <div className="rounded-2xl bg-[#161436] border border-[#3DD6FF]/35 px-4 py-3 flex items-center justify-between gap-3">
+        <div className="rounded-2xl bg-surface border border-sky/35 px-4 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <span className="text-lg shrink-0">📣</span>
             <div className="min-w-0">
-              <p className="text-xs font-bold text-[#3DD6FF] truncate">
+              <p className="text-xs font-bold text-t-sky truncate">
                 IRON DEN · {latestBroadcast.title}
               </p>
-              <p className="text-xs text-slate-300 truncate">{latestBroadcast.message}</p>
+              <p className="text-xs text-ink-3 truncate">{latestBroadcast.message}</p>
             </div>
           </div>
           <button
             type="button"
             onClick={() => onNavigate('board')}
-            className="text-xs font-semibold text-white hover:text-[#39FF88] whitespace-nowrap shrink-0 cursor-pointer"
+            className="text-xs font-semibold text-ink hover:text-t-primary whitespace-nowrap shrink-0 cursor-pointer"
           >
             View →
           </button>
@@ -94,7 +94,7 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
         {/* Left Column: Streak Hero, Crowd Ring, Points & Today, Check-In */}
         <div className="lg:col-span-7 space-y-5">
           {/* Streak Hero Card */}
-          <div className="rounded-3xl p-6 bg-gradient-to-r from-[#FF3DA8] via-[#B44DFF] to-[#39FF88] sticker-pink relative overflow-hidden">
+          <div className="rounded-3xl p-6 bg-gradient-to-r from-accent via-grape-hi to-primary sticker-pink relative overflow-hidden">
             <div className="relative z-10">
               <div className="flex items-start justify-between gap-4 mb-5">
                 <div>
@@ -105,7 +105,7 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
                     <span className="font-display text-5xl sm:text-6xl text-white tabular-nums leading-none">
                       {streakWeeks}
                     </span>
-                    <Flame className="w-9 h-9 text-[#FFD23F] fill-[#FFD23F]" />
+                    <Flame className="w-9 h-9 text-coin fill-coin" />
                   </div>
                   <p className="text-xs sm:text-sm font-medium text-white/95 mt-2">
                     {streakWeeks} weeks · {weeksToTee} to the T-shirt
@@ -113,10 +113,10 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
                 </div>
 
                 <div className="text-right">
-                  <span className="font-pixel text-[10px] tracking-widest text-[#0B0A1F] font-bold block mb-1">
+                  <span className="font-pixel text-[10px] tracking-widest text-onbright font-bold block mb-1">
                     THIS WEEK
                   </span>
-                  <div className="font-display text-3xl text-[#0B0A1F] tabular-nums">
+                  <div className="font-display text-3xl text-onbright tabular-nums">
                     {thisWeekCount}/{weeklyGoal}
                   </div>
                 </div>
@@ -132,7 +132,7 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
                       className={`h-2.5 rounded-full transition-all ${
                         filled
                           ? 'bg-white shadow-[0_0_10px_rgba(255,255,255,0.75)]'
-                          : 'bg-[#0B0A1F]/30'
+                          : 'bg-void/30'
                       }`}
                     />
                   );
@@ -145,13 +145,13 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
           <button
             type="button"
             onClick={() => onNavigate('crowd')}
-            className="w-full text-left rounded-3xl bg-[#13122E] hover:bg-[#18163A] border border-white/12 p-5 sm:p-6 transition-colors cursor-pointer group"
+            className="w-full text-left rounded-3xl bg-surface hover:bg-raised border border-line/12 p-5 sm:p-6 transition-colors cursor-pointer group"
           >
             <div className="flex items-center justify-between gap-4">
               <div>
-                <div className="font-pixel text-[10px] text-slate-400 tracking-wider mb-1.5 flex items-center gap-2">
+                <div className="font-pixel text-[10px] text-ink-4 tracking-wider mb-1.5 flex items-center gap-2">
                   <span>IRON DEN · LIVE</span>
-                  <Users className="w-3.5 h-3.5 text-[#3DD6FF]" />
+                  <Users className="w-3.5 h-3.5 text-t-sky" />
                 </div>
                 <div className="flex items-center gap-2 mb-1">
                   <span
@@ -162,7 +162,7 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
                   </span>
                   <span className="text-2xl">{crowdStatus.emoji}</span>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-300 tabular-nums">
+                <p className="text-xs sm:text-sm text-ink-3 tabular-nums">
                   {peopleInside} people inside · {occupancyPct}% full
                 </p>
               </div>
@@ -191,17 +191,17 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
                     className="transition-all duration-300"
                   />
                 </svg>
-                <span className="absolute font-display text-sm text-white tabular-nums">
+                <span className="absolute font-display text-sm text-ink tabular-nums">
                   {occupancyPct}%
                 </span>
               </div>
             </div>
 
-            <div className="mt-4 pt-3.5 border-t border-white/8 flex items-center justify-between text-xs text-slate-300">
+            <div className="mt-4 pt-3.5 border-t border-line/8 flex items-center justify-between text-xs text-ink-3">
               <span>
-                Best window: <strong className="text-white">2–4 PM</strong> · rush at 6 PM
+                Best window: <strong className="text-ink">2–4 PM</strong> · rush at 6 PM
               </span>
-              <span className="text-[#3DD6FF] font-semibold group-hover:translate-x-0.5 transition-transform">
+              <span className="text-t-sky font-semibold group-hover:translate-x-0.5 transition-transform">
                 Hourly graph →
               </span>
             </div>
@@ -212,29 +212,29 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
             <button
               type="button"
               onClick={() => onNavigate('board')}
-              className="text-left rounded-2xl bg-[#13122E] hover:bg-[#18163A] border border-white/12 p-5 transition-colors cursor-pointer"
+              className="text-left rounded-2xl bg-surface hover:bg-raised border border-line/12 p-5 transition-colors cursor-pointer"
             >
               <div className="flex items-center justify-between mb-1">
-                <span className="font-pixel text-[10px] text-slate-400 tracking-wider">POINTS</span>
-                <Trophy className="w-4 h-4 text-[#FFD23F]" />
+                <span className="font-pixel text-[10px] text-ink-4 tracking-wider">POINTS</span>
+                <Trophy className="w-4 h-4 text-t-coin" />
               </div>
-              <div className="font-display text-3xl text-[#FFD23F] tabular-nums mb-1">
+              <div className="font-display text-3xl text-t-coin tabular-nums mb-1">
                 {points}
               </div>
-              <p className="text-xs text-slate-300 tabular-nums">#{rank} at your gym</p>
+              <p className="text-xs text-ink-3 tabular-nums">#{rank} at your gym</p>
             </button>
 
             <button
               type="button"
               onClick={() => onNavigate('workout')}
-              className="text-left rounded-2xl bg-[#13122E] hover:bg-[#18163A] border border-white/12 p-5 transition-colors cursor-pointer"
+              className="text-left rounded-2xl bg-surface hover:bg-raised border border-line/12 p-5 transition-colors cursor-pointer"
             >
               <div className="flex items-center justify-between mb-1">
-                <span className="font-pixel text-[10px] text-slate-400 tracking-wider">TODAY</span>
-                <Zap className="w-4 h-4 text-[#3DD6FF]" />
+                <span className="font-pixel text-[10px] text-ink-4 tracking-wider">TODAY</span>
+                <Zap className="w-4 h-4 text-t-sky" />
               </div>
-              <div className="font-display text-3xl text-[#3DD6FF] mb-1">Push</div>
-              <p className="text-xs text-slate-300 tabular-nums">
+              <div className="font-display text-3xl text-t-sky mb-1">Push</div>
+              <p className="text-xs text-ink-3 tabular-nums">
                 {completedMoves}/{exercises.length} moves · 55m
               </p>
             </button>
@@ -244,7 +244,7 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
           <button
             type="button"
             onClick={() => onNavigate('checkin')}
-            className="w-full min-h-[54px] px-6 py-4 rounded-2xl bg-[#39FF88] hover:bg-[#52FF9A] text-[#0B0A1F] font-display text-base sm:text-lg tracking-wide flex items-center justify-center gap-3 sticker-green transition-all cursor-pointer"
+            className="w-full min-h-[54px] px-6 py-4 rounded-2xl bg-primary hover:bg-primary-hi text-onbright font-display text-base sm:text-lg tracking-wide flex items-center justify-center gap-3 sticker-green transition-all cursor-pointer"
           >
             <Camera className="w-5 h-5" />
             <span>CHECK IN NOW</span>
@@ -252,26 +252,26 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
         </div>
 
         {/* Right Column: Today's Workout Quest Preview (Desktop full presence, accessible on mobile too) */}
-        <div className="lg:col-span-5 rounded-3xl bg-[#13122E] border border-white/12 p-6 sticker-card">
+        <div className="lg:col-span-5 rounded-3xl bg-surface border border-line/12 p-6 sticker-card">
           <div className="flex items-center justify-between mb-3">
-            <span className="font-pixel text-[10px] text-[#3DD6FF] tracking-wider">
+            <span className="font-pixel text-[10px] text-t-sky tracking-wider">
               TODAY · MONDAY
             </span>
             <button
               type="button"
               onClick={() => onNavigate('workout')}
-              className="text-xs font-semibold text-[#39FF88] hover:underline flex items-center gap-1 cursor-pointer"
+              className="text-xs font-semibold text-t-primary hover:underline flex items-center gap-1 cursor-pointer"
             >
               <span>Full Quest</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          <h2 className="font-display text-2xl text-white mb-2">Push day 💥</h2>
-          <div className="flex flex-wrap items-center gap-2 text-xs text-slate-300 mb-5">
-            <span className="font-semibold text-[#3DD6FF]">55 min</span>
+          <h2 className="font-display text-2xl text-ink mb-2">Push day 💥</h2>
+          <div className="flex flex-wrap items-center gap-2 text-xs text-ink-3 mb-5">
+            <span className="font-semibold text-t-sky">55 min</span>
             <span aria-hidden="true">·</span>
-            <span className="font-semibold text-[#FFD23F]">+40 XP</span>
+            <span className="font-semibold text-t-coin">+40 XP</span>
             <span aria-hidden="true">·</span>
             <span>by Coach Ravi</span>
           </div>
@@ -284,34 +284,34 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
                 onClick={() => onToggleExercise(ex.id)}
                 className={`w-full min-h-[54px] px-4 py-3 rounded-2xl flex items-center justify-between gap-3 text-left transition-all cursor-pointer border ${
                   ex.isCurrent && !ex.completed
-                    ? 'bg-[#1D153A] border-[#FF3DA8] shadow-[0_0_20px_rgba(255,61,168,0.18)]'
+                    ? 'bg-raised border-accent shadow-[0_0_20px_rgba(0,119,182,0.18)]'
                     : ex.completed
-                      ? 'bg-[#0E0D26]/90 border-[#39FF88]/25'
-                      : 'bg-[#0E0D26]/60 border-white/8 hover:border-white/20'
+                      ? 'bg-base/90 border-primary/25'
+                      : 'bg-base/60 border-line/8 hover:border-line/20'
                 }`}
               >
                 <div className="min-w-0">
                   <p
                     className={`text-sm font-semibold truncate ${
-                      ex.completed ? 'text-slate-400 line-through' : 'text-white'
+                      ex.completed ? 'text-ink-4 line-through' : 'text-ink'
                     }`}
                   >
                     {ex.name}
                   </p>
-                  <p className="text-xs text-slate-400 tabular-nums">
+                  <p className="text-xs text-ink-4 tabular-nums">
                     {ex.setsReps}
                     {ex.weight ? ` · ${ex.weight}` : ''}
                   </p>
                 </div>
 
                 {ex.completed ? (
-                  <CheckCircle2 className="w-5 h-5 text-[#39FF88] shrink-0" />
+                  <CheckCircle2 className="w-5 h-5 text-t-primary shrink-0" />
                 ) : ex.isCurrent ? (
-                  <span className="font-pixel text-[10px] bg-[#FF3DA8] text-white px-2.5 py-1 rounded-full shrink-0">
+                  <span className="font-pixel text-[10px] bg-accent text-white px-2.5 py-1 rounded-full shrink-0">
                     NOW
                   </span>
                 ) : (
-                  <span className="w-5 h-5 rounded-full border-2 border-white/25 shrink-0" />
+                  <span className="w-5 h-5 rounded-full border-2 border-line/25 shrink-0" />
                 )}
               </button>
             ))}
@@ -319,16 +319,16 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
 
           <div>
             <div className="flex items-center justify-between text-xs mb-2">
-              <span className="font-pixel text-[10px] text-slate-400">
+              <span className="font-pixel text-[10px] text-ink-4">
                 QUEST PROGRESS {completedMoves}/{exercises.length}
               </span>
-              <span className="text-xs font-semibold text-[#39FF88] tabular-nums">
+              <span className="text-xs font-semibold text-t-primary tabular-nums">
                 {Math.round((completedMoves / exercises.length) * 100)}%
               </span>
             </div>
-            <div className="h-2.5 rounded-full bg-[#0B0A1F] overflow-hidden">
+            <div className="h-2.5 rounded-full bg-void overflow-hidden">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-[#39FF88] to-[#3DD6FF] transition-all duration-300"
+                className="h-full rounded-full bg-gradient-to-r from-primary to-sky transition-all duration-300"
                 style={{ width: `${(completedMoves / exercises.length) * 100}%` }}
               />
             </div>
