@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ChevronDown, Pause, Play, RotateCcw, Skull, Swords } from 'lucide-react';
+import { ChevronDown, Pause, Play, RotateCcw } from 'lucide-react';
 import { AnimatedNumber, Reveal, Ring } from './fx';
 
 /* ---------------- Season countdown ---------------- */
@@ -42,82 +42,6 @@ export const SeasonCountdown: React.FC = () => {
           {i < 3 && <span className="font-hud text-xl text-t-primary blink -mt-5">:</span>}
         </React.Fragment>
       ))}
-    </div>
-  );
-};
-
-/* ---------------- Weekly raid (community boss fight) ---------------- */
-export const WeeklyRaid: React.FC = () => {
-  const total = 1000;
-  const [hp, setHp] = useState(388);
-  const [hits, setHits] = useState<{ id: number; x: number; dmg: number }[]>([]);
-  const idRef = useRef(0);
-  useEffect(() => {
-    const t = window.setInterval(() => setHp((h) => Math.max(0, h - Math.ceil(Math.random() * 3))), 2600);
-    return () => window.clearInterval(t);
-  }, []);
-  const attack = () => {
-    const dmg = 5 + Math.floor(Math.random() * 11);
-    setHp((h) => Math.max(0, h - dmg));
-    const id = ++idRef.current;
-    setHits((p) => [...p, { id, x: 20 + Math.random() * 60, dmg }]);
-    window.setTimeout(() => setHits((p) => p.filter((h) => h.id !== id)), 900);
-    navigator.vibrate?.(20);
-  };
-  const pct = (hp / total) * 100;
-  return (
-    <div className="hud-corners rounded-3xl bg-surface border border-line/12 p-6 sm:p-8 sticker-card overflow-hidden">
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-        <span className="font-pixel text-[11px] text-t-accent tracking-widest flex items-center gap-2">
-          <Swords className="w-4 h-4" /> WEEKLY RAID · IRON DEN
-        </span>
-        <span className="font-pixel text-[10px] text-ink-4">SQUAT BOSS · 1,000 HP</span>
-      </div>
-      <div className="grid sm:grid-cols-[auto_1fr] gap-6 items-center">
-        <motion.button
-          type="button"
-          onClick={attack}
-          whileTap={{ scale: 0.85, rotate: -6 }}
-          animate={{ y: [0, -6, 0] }}
-          transition={{ y: { duration: 2, repeat: Infinity, ease: 'easeInOut' } }}
-          className="relative mx-auto w-28 h-28 rounded-3xl bg-accent text-white flex items-center justify-center shadow-[0_0_40px_-6px_var(--color-accent)] cursor-pointer"
-          aria-label="Attack the raid boss"
-        >
-          <Skull className="w-14 h-14" />
-          <AnimatePresence>
-            {hits.map((h) => (
-              <motion.span
-                key={h.id}
-                className="absolute font-hud text-lg text-t-coin pointer-events-none"
-                style={{ left: `${h.x}%` }}
-                initial={{ y: 0, opacity: 1, scale: 0.8 }}
-                animate={{ y: -70, opacity: 0, scale: 1.3 }}
-                transition={{ duration: 0.9 }}
-              >
-                -{h.dmg}
-              </motion.span>
-            ))}
-          </AnimatePresence>
-        </motion.button>
-        <div>
-          <h3 className="font-display text-2xl sm:text-3xl text-ink mb-1">Beat the squat boss together</h3>
-          <p className="text-sm text-ink-3 mb-4">Every squat logged by any member deals damage. Tap the boss to log 5–15 reps.</p>
-          <div className="flex justify-between text-xs mb-1.5">
-            <span className="font-pixel text-ink-4">BOSS HP</span>
-            <span className="font-hud text-t-primary">
-              <AnimatedNumber value={hp} /> / {total}
-            </span>
-          </div>
-          <div className="h-4 rounded-full bg-base border border-line/15 overflow-hidden p-0.5">
-            <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-accent via-primary to-sky"
-              animate={{ width: `${pct}%` }}
-              transition={{ type: 'spring', stiffness: 120, damping: 20 }}
-            />
-          </div>
-          <p className="text-xs text-ink-4 mt-3">{hp === 0 ? 'Boss defeated! Everyone gets +75 XP 🎉' : 'Reward when defeated: +75 XP for every member who joined in.'}</p>
-        </div>
-      </div>
     </div>
   );
 };
@@ -273,7 +197,7 @@ const BADGES = [
   { e: '😌', n: 'Off-Peak Hero', d: 'Train in the quiet window 10 times.', got: false },
   { e: '🔥', n: 'On Fire', d: 'Hit your weekly goal 10 weeks straight.', got: true },
   { e: '🧊', n: 'Comeback Kid', d: 'Earn back a lost streak.', got: false },
-  { e: '⚔️', n: 'Raid Leader', d: 'Top damage in a weekly raid.', got: false },
+  { e: '💯', n: 'Centurion', d: 'Reach 100 total check-ins.', got: false },
   { e: '👑', n: 'Gym Royalty', d: 'Finish #1 on the monthly board.', got: false },
 ];
 

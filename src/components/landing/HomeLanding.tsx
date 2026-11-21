@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Calculator, Dumbbell, Flame, Gift, Play, QrCode, Store, Users } from 'lucide-react';
 import { AnimatedNumber, Blobs, LiveBars, LiveTicker, Reveal, Ring, TiltCard, useLiveValue } from './fx';
-import { FAQ, SeasonCountdown, WeeklyRaid } from './arcade';
+import { FAQ, SeasonCountdown } from './arcade';
 
 const TITLE = ['G', 'Y', 'M', ' ', 'L', 'O', 'O', 'P'];
 
@@ -178,20 +178,17 @@ export const HomeLanding: React.FC<{ go: (p: string) => void }> = ({ go }) => {
         </div>
       </section>
 
-      {/* SEASON + RAID */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-20 grid lg:grid-cols-5 gap-6 items-stretch">
-        <Reveal className="lg:col-span-2">
-          <div className="hud-corners h-full rounded-3xl bg-surface border border-line/12 p-6 sm:p-8 sticker-card flex flex-col justify-between gap-6">
+      {/* SEASON COUNTDOWN */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-20">
+        <Reveal>
+          <div className="hud-corners rounded-3xl bg-surface border border-line/12 p-6 sm:p-8 sticker-card flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div>
               <p className="font-pixel text-[11px] text-t-coin tracking-widest mb-2">SEASON 2027 · Q1</p>
               <h3 className="font-display text-2xl sm:text-3xl text-ink mb-2">Season ends in</h3>
-              <p className="text-sm text-ink-3">Finish the season on a streak to unlock the Season Hoodie before it&apos;s gone for good.</p>
+              <p className="text-sm text-ink-3 max-w-md">Finish the season on a streak to unlock the Season Hoodie before it&apos;s gone for good.</p>
             </div>
             <SeasonCountdown />
           </div>
-        </Reveal>
-        <Reveal className="lg:col-span-3" delay={0.1}>
-          <WeeklyRaid />
         </Reveal>
       </section>
 
