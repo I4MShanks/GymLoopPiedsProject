@@ -402,13 +402,11 @@ export default function App() {
           appMode === 'member' ? 'pt-6 pb-24 md:pb-10' : ['home', 'members', 'owners'].includes(page) ? 'pb-6' : 'py-6'
         }`}
       >
-        <AnimatePresence mode="wait">
         <motion.div
           key={path}
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -12 }}
-          transition={{ duration: 0.32, ease: [0.2, 0.8, 0.2, 1] }}
+          transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
         >
         {page === 'home' && <HomeLanding go={go} />}
         {page === 'members' && <MembersLanding go={go} />}
@@ -530,7 +528,6 @@ export default function App() {
           />
         )}
         </motion.div>
-        </AnimatePresence>
       </div>
 
       {/* Mobile Fixed 5-Tab Bottom Bar (Member App) - obeys <=15% sticky height & >=44px touch targets */}

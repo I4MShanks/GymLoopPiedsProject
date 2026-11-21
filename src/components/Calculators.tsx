@@ -552,9 +552,9 @@ export const Calculators: React.FC<{ active?: string; go: (p: string) => void }>
 
   return (
     <div className="py-4">
-      <AnimatePresence mode="wait">
+      <>
         {!current ? (
-          <motion.div key="grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 0.98 }}>
+          <motion.div key="grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <Reveal>
               <p className="font-pixel text-xs text-t-primary tracking-widest mb-3">
                 <Activity className="w-4 h-4 inline -mt-1 mr-1" /> TOOLS
@@ -582,7 +582,6 @@ export const Calculators: React.FC<{ active?: string; go: (p: string) => void }>
             key={current.id}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
           >
             <button type="button" onClick={() => go('/calculators')} className="inline-flex items-center gap-2 text-sm text-ink-3 hover:text-ink mb-5 cursor-pointer">
@@ -615,7 +614,7 @@ export const Calculators: React.FC<{ active?: string; go: (p: string) => void }>
             <p className="text-xs text-ink-5 mt-8">General estimates from standard formulas, not medical advice.</p>
           </motion.div>
         )}
-      </AnimatePresence>
+      </>
     </div>
   );
 };
