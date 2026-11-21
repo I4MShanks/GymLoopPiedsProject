@@ -17,7 +17,7 @@
   --font-mono: "JetBrains Mono", monospace;
 }
 
-/* Palette: arcade maze — black · yellow · red (+ orange & pink accents) */
+/* Palette: arcade maze — black · yellow · red · maze blue · cyan (+ orange & pink) */
 @theme inline {
   --color-void: var(--c-void);
   --color-base: var(--c-base);
@@ -45,6 +45,8 @@
   --color-ink-4: var(--c-ink-4);
   --color-ink-5: var(--c-ink-5);
   --color-line: var(--c-line);
+  --color-maze: var(--c-maze);
+  --color-pink: var(--c-pink);
 }
 
 /* Night mode (default): black maze */
@@ -60,15 +62,17 @@
   --c-accent-hi: #FF5A5A;
   --c-coin: #FFB852;
   --c-coin-hi: #FFCB80;
-  --c-sky: #FFB8FF;
-  --c-sky-hi: #FFD1FF;
-  --c-grape: #C40000;
-  --c-grape-hi: #FF2E2E;
+  --c-sky: #00E5FF;
+  --c-sky-hi: #7DF3FF;
+  --c-grape: #2121DE;
+  --c-grape-hi: #3B3BFF;
+  --c-maze: #2B2BF0;
+  --c-pink: #FFB8FF;
   --c-onbright: #000000;
   --c-t-primary: #FFD600;
   --c-t-accent: #FF4D4D;
   --c-t-coin: #FFB852;
-  --c-t-sky: #FFB8FF;
+  --c-t-sky: #00E5FF;
   --c-ink: #FFFFFF;
   --c-ink-2: #F2F2F2;
   --c-ink-3: #D6D6D6;
@@ -76,7 +80,7 @@
   --c-ink-5: #767676;
   --c-line: #FFFFFF;
   --glow-a: rgba(255, 214, 0, 0.14);
-  --glow-b: rgba(255, 46, 46, 0.12);
+  --glow-b: rgba(43, 43, 240, 0.28);
   --dots: rgba(255, 214, 0, 0.16);
   color-scheme: dark;
 }
@@ -94,15 +98,17 @@ html.light {
   --c-accent-hi: #B80500;
   --c-coin: #FFB852;
   --c-coin-hi: #FFCB80;
-  --c-sky: #FF8FE0;
-  --c-sky-hi: #FFB8FF;
-  --c-grape: #111111;
-  --c-grape-hi: #333333;
+  --c-sky: #00C2E0;
+  --c-sky-hi: #5FE0F5;
+  --c-grape: #2121DE;
+  --c-grape-hi: #1818B0;
+  --c-maze: #2121DE;
+  --c-pink: #FF8FE0;
   --c-onbright: #000000;
   --c-t-primary: #8F6F00;
   --c-t-accent: #C00000;
   --c-t-coin: #A35400;
-  --c-t-sky: #B0007A;
+  --c-t-sky: #006F85;
   --c-ink: #111111;
   --c-ink-2: #222222;
   --c-ink-3: #444444;
@@ -110,7 +116,7 @@ html.light {
   --c-ink-5: #8A8A8A;
   --c-line: #111111;
   --glow-a: rgba(255, 214, 0, 0.35);
-  --glow-b: rgba(255, 46, 46, 0.10);
+  --glow-b: rgba(33, 33, 222, 0.12);
   --dots: rgba(0, 0, 0, 0.09);
   color-scheme: light;
 }
@@ -364,3 +370,11 @@ html.light .sticker-card { box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.12); }
 /* Pixel heart */
 .pixel-heart { width: 12px; height: 11px; display: inline-block; background: var(--c-accent);
   clip-path: polygon(0 18%, 18% 0, 36% 0, 50% 18%, 64% 0, 82% 0, 100% 18%, 100% 45%, 50% 100%, 0 45%); }
+
+
+/* Maze walls: card & panel borders glow in classic maze blue */
+.border-line\/10, .border-line\/12, .border-line\/15, .border-line\/20 {
+  border-color: color-mix(in oklab, var(--c-maze) 80%, transparent);
+}
+html:not(.light) .sticker-card { box-shadow: 0 0 0 1px color-mix(in oklab, var(--c-maze) 60%, transparent), 0 0 22px -8px var(--c-maze), 6px 6px 0 rgba(255, 46, 46, 0.3); }
+.hud-corners::before, .hud-corners::after { border-color: var(--c-primary); }
