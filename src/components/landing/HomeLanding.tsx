@@ -29,7 +29,7 @@ export const HomeLanding: React.FC<{ go: (p: string) => void }> = ({ go }) => {
               </span>
             </motion.div>
 
-            <h1 className="glitch font-display text-6xl sm:text-8xl lg:text-9xl leading-[0.9] tracking-tight text-t-primary neon mb-6">
+            <h1 className="glitch font-display text-[clamp(2rem,10.5vw,6.5rem)] lg:text-[clamp(3rem,6.2vw,6.5rem)] whitespace-nowrap leading-none tracking-tight text-t-primary neon mb-6">
               {TITLE.map((ch, i) => (
                 <motion.span
                   key={i}
