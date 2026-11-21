@@ -29,7 +29,7 @@ export const HomeLanding: React.FC<{ go: (p: string) => void }> = ({ go }) => {
               </span>
             </motion.div>
 
-            <h1 className="glitch font-hud font-black text-6xl sm:text-8xl lg:text-9xl leading-[0.9] tracking-tight text-t-primary neon mb-6">
+            <h1 className="glitch font-display text-6xl sm:text-8xl lg:text-9xl leading-[0.9] tracking-tight text-t-primary neon mb-6">
               {TITLE.map((ch, i) => (
                 <motion.span
                   key={i}
@@ -64,7 +64,7 @@ export const HomeLanding: React.FC<{ go: (p: string) => void }> = ({ go }) => {
                 onClick={() => go('/join')}
                 className="shimmer min-h-[54px] px-8 rounded-2xl bg-primary hover:bg-primary-hi text-onbright font-display text-lg flex items-center justify-center gap-3 sticker-green cursor-pointer"
               >
-                <Play className="w-5 h-5 fill-current" /> PRESS START
+                <Play className="w-5 h-5 fill-current" /> <span className="font-hud text-sm">PRESS START</span>
               </button>
               <button
                 type="button"

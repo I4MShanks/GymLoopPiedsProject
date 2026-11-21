@@ -1,13 +1,36 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Calculator, Camera, Gift, Home, Menu, Moon, Sun, Trophy, Users, X } from 'lucide-react';
+import { Calculator, Camera, Gift, Home, Menu, Moon, Sun, Trophy, Users, Volume2, VolumeX, X } from 'lucide-react';
 import { useHashRoute } from './lib/router';
 import { useTheme } from './lib/theme';
 import { HomeLanding } from './components/landing/HomeLanding';
 import { MembersLanding } from './components/landing/MembersLanding';
 import { OwnersLanding } from './components/landing/OwnersLanding';
 import { Calculators } from './components/Calculators';
-import { DailyQuests, LeagueCard, MascotNudge, PowerUps, StreakCalendar, XpGoal } from './components/gamify';
+import { DailyQuests, LeagueCard, MascotNudge, PowerUps, StreakCalendar, XpGoal, freezesEarned } from './components/gamify';
+
+/* 8-bit blip using the Web Audio API (no sound files needed) */
+let audioCtx: AudioContext | null = null;
+const blip = (freq = 660, dur = 0.06) => {
+  try {
+    audioCtx = audioCtx ?? new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'square';
+    o.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(freq * 1.6, audioCtx.currentTime + dur);
+    g.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
+    o.connect(g).connect(audioCtx.destination);
+    o.start();
+    o.stop(audioCtx.currentTime + dur);
+  } catch {
+    /* audio not available */
+  }
+};
+
+/* stepped "8-bit" easing for page entrances */
+const stepped = (t: number) => Math.round(t * 6) / 6;
 import {
   INITIAL_BROADCASTS,
   INITIAL_CHALLENGES,
@@ -56,6 +79,25 @@ export default function App() {
   const [theme, toggleTheme] = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [xpToday, setXpToday] = useState(40);
+  const [soundOn, setSoundOn] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('gymloop-sound') === 'on';
+    } catch {
+      return false;
+    }
+  });
+  const soundRef = React.useRef(soundOn);
+  useEffect(() => {
+    soundRef.current = soundOn;
+    try {
+      localStorage.setItem('gymloop-sound', soundOn ? 'on' : 'off');
+    } catch {
+      /* ignore */
+    }
+  }, [soundOn]);
+  useEffect(() => {
+    if (soundRef.current) blip(440, 0.09);
+  }, [path]);
 
   // Tap feedback: neon ring burst + tiny haptic on phones
   useEffect(() => {
@@ -69,6 +111,7 @@ export default function App() {
       document.body.appendChild(b);
       window.setTimeout(() => b.remove(), 600);
       if (e.pointerType === 'touch') navigator.vibrate?.(8);
+      if (soundRef.current) blip(720 + Math.random() * 120);
     };
     window.addEventListener('pointerdown', onDown);
     return () => window.removeEventListener('pointerdown', onDown);
@@ -308,7 +351,7 @@ export default function App() {
           <button
             type="button"
             onClick={() => go('/')}
-            className="font-hud font-black text-xl tracking-tight text-t-primary neon whitespace-nowrap shrink-0 cursor-pointer"
+            className="font-hud text-sm sm:text-base text-t-primary neon whitespace-nowrap shrink-0 cursor-pointer"
           >
             GYMLOOP
           </button>
@@ -349,6 +392,17 @@ export default function App() {
           <div className="flex items-center gap-2 shrink-0">
             <button
               type="button"
+              onClick={() => {
+                setSoundOn((v) => !v);
+                blip(880, 0.08);
+              }}
+              aria-label={soundOn ? 'Mute sounds' : 'Turn on arcade sounds'}
+              className={`w-9 h-9 rounded-lg border flex items-center justify-center cursor-pointer ${soundOn ? 'bg-primary text-onbright border-primary' : 'bg-surface text-ink-3 border-line/20'}`}
+            >
+              {soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            </button>
+            <button
+              type="button"
               onClick={toggleTheme}
               aria-label={theme === 'dark' ? 'Switch to day mode' : 'Switch to night mode'}
               className="relative w-16 h-9 rounded-full bg-surface border border-line/20 cursor-pointer overflow-hidden"
@@ -381,13 +435,35 @@ export default function App() {
           </div>
         </div>
 
+        {/* Arcade HUD strip */}
+        <div className="hud-strip absolute left-0 right-0 top-16 h-7 bg-base/90 backdrop-blur border-b border-line/10 text-ink-3">
+          <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 flex items-center justify-between gap-3 whitespace-nowrap overflow-hidden">
+            <span>
+              <span className="text-t-accent blink">1UP</span> <span className="text-ink">{String(points).padStart(6, '0')}</span>
+            </span>
+            <span className="hidden sm:inline">
+              HI-SCORE <span className="text-t-coin">{String(Math.max(612, points)).padStart(6, '0')}</span>
+            </span>
+            <span>
+              STREAK <span className="text-t-primary">{streakWeeks}W</span>
+            </span>
+            <span className="flex items-center gap-1">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <span key={i} className={`pixel-heart ${i < freezesEarned(streakWeeks) + 1 ? '' : 'opacity-25'}`} />
+              ))}
+            </span>
+            <span className="hidden md:inline">
+              {appMode === 'onboarding' ? <span className="blink text-t-primary">INSERT COIN</span> : appMode === 'owner' ? 'BOSS MODE' : 'PLAYER 1'}
+            </span>
+          </div>
+        </div>
         <AnimatePresence>
           {menuOpen && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="md:hidden absolute top-16 left-0 right-0 bg-void/95 backdrop-blur-xl border-b border-line/10 px-4 py-3 flex flex-col gap-1"
+              className="md:hidden absolute top-[92px] left-0 right-0 z-10 bg-void/95 backdrop-blur-xl border-b border-line/10 px-4 py-3 flex flex-col gap-1"
             >
               {[
                 ['/', 'Home'],
@@ -419,15 +495,15 @@ export default function App() {
 
       {/* Main Content Area */}
       <div
-        className={`flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 ${
+        className={`flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 mt-7 ${
           appMode === 'member' ? 'pt-6 pb-24 md:pb-10' : ['home', 'members', 'owners'].includes(page) ? 'pb-6' : 'py-6'
         }`}
       >
         <motion.div
           key={path}
-          initial={{ opacity: 0, y: 24, scale: 0.985, filter: 'blur(6px)' }}
-          animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-          transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+          initial={{ opacity: 0, y: 30, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.42, ease: stepped }}
         >
         {page === 'home' && <HomeLanding go={go} />}
         {page === 'members' && <MembersLanding go={go} />}

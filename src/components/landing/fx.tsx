@@ -42,7 +42,7 @@ export const AnimatedNumber: React.FC<{ value: number; decimals?: number; prefix
     return () => controls.stop();
   }, [value, inView]);
   return (
-    <span ref={ref} className={`font-hud tabular-nums ${className ?? ''}`}>
+    <span ref={ref} className={`font-score tabular-nums ${className ?? ''}`}>
       {prefix}
       {shown.toLocaleString('en-IN', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}
       {suffix}

@@ -562,7 +562,7 @@ export const Calculators: React.FC<{ active?: string; go: (p: string) => void }>
               <p className="font-pixel text-xs text-t-primary tracking-widest mb-3">
                 <Activity className="w-4 h-4 inline -mt-1 mr-1" /> TOOLS
               </p>
-              <h1 className="font-hud font-black text-4xl sm:text-5xl text-t-primary neon mb-3">FITNESS TOOLS</h1>
+              <h1 className="font-display text-4xl sm:text-6xl text-t-primary neon mb-3">FITNESS TOOLS</h1>
               <p className="text-ink-3 mb-10 max-w-2xl">Quick reference numbers for your training and nutrition. Drag the sliders and the results update live.</p>
             </Reveal>
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
