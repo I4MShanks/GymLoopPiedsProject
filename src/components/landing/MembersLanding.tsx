@@ -80,7 +80,7 @@ export const MembersLanding: React.FC<{ go: (p: string) => void }> = ({ go }) =>
                 {Array.from({ length: 36 }).map((_, i) => (
                   <motion.span
                     key={i}
-                    className="rounded-[2px] bg-[#03045E]"
+                    className="rounded-[2px] bg-black"
                     animate={{ opacity: [1, (i * 7) % 3 ? 1 : 0.1, 1] }}
                     transition={{ duration: 3, repeat: Infinity, delay: (i % 6) * 0.1 }}
                   />

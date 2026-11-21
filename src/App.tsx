@@ -345,6 +345,16 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-arcade-grid text-ink flex flex-col">
+      <div className="boot" aria-hidden="true">
+        <div className="font-hud text-2xl sm:text-3xl" style={{ color: '#FFD600', textShadow: '4px 4px 0 #FF2E2E' }}>
+          GYMLOOP
+        </div>
+        <div className="boot-bar">
+          <span />
+        </div>
+        <div className="font-pixel text-[11px] tracking-widest blink">INSERT COIN · LOADING</div>
+      </div>
+      <div key={path} className="route-wipe" aria-hidden="true" />
       {/* Top bar */}
       <header className="sticky top-0 z-40 h-16 bg-void/80 backdrop-blur-xl border-b border-line/10">
         <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 flex items-center justify-between gap-6">

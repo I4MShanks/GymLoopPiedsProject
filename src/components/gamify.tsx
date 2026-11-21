@@ -308,8 +308,8 @@ const LEAGUES = [
   { n: 'Bronze', c: '#B87333' },
   { n: 'Silver', c: '#A8B5C4' },
   { n: 'Gold', c: '#E6B422' },
-  { n: 'Sapphire', c: '#0077B6' },
-  { n: 'Diamond', c: '#90E0EF' },
+  { n: 'Ruby', c: '#FF2E2E' },
+  { n: 'Diamond', c: '#F5F5F5' },
 ];
 const PLAYERS = [
   ['Kabir', 612], ['Riya', 540], ['Aman', 488], ['You', 340], ['Sneha', 315], ['Dev', 290], ['Ishita', 260],

@@ -120,7 +120,7 @@ export const WorkoutQuest: React.FC<WorkoutQuestProps> = ({
               onClick={() => onToggleExercise(ex.id)}
               className={`w-full min-h-[64px] px-5 py-4 rounded-2xl flex items-center justify-between gap-4 text-left transition-all cursor-pointer border ${
                 ex.isCurrent && !ex.completed
-                  ? 'bg-raised border-accent shadow-[0_0_24px_rgba(0,119,182,0.2)]'
+                  ? 'bg-raised border-accent shadow-[0_0_24px_rgba(255,46,46,0.2)]'
                   : ex.completed
                     ? 'bg-base border-primary/30'
                     : 'bg-base border-line/10 hover:border-line/25'

@@ -279,7 +279,7 @@ export const MemberOnboarding: React.FC<MemberOnboardingProps> = ({
                   aria-label={`Toggle ${day.key}`}
                   className={`min-h-[44px] rounded-full font-display text-sm flex items-center justify-center transition-all cursor-pointer ${
                     active
-                      ? 'bg-primary text-onbright shadow-[0_0_16px_rgba(0,180,216,0.35)]'
+                      ? 'bg-primary text-onbright shadow-[0_0_16px_rgba(255,214,0,0.35)]'
                       : 'bg-base text-ink-4 border border-line/12 hover:border-line/30'
                   }`}
                 >

@@ -284,7 +284,7 @@ export const MemberHome: React.FC<MemberHomeProps> = ({
                 onClick={() => onToggleExercise(ex.id)}
                 className={`w-full min-h-[54px] px-4 py-3 rounded-2xl flex items-center justify-between gap-3 text-left transition-all cursor-pointer border ${
                   ex.isCurrent && !ex.completed
-                    ? 'bg-raised border-accent shadow-[0_0_20px_rgba(0,119,182,0.18)]'
+                    ? 'bg-raised border-accent shadow-[0_0_20px_rgba(255,46,46,0.18)]'
                     : ex.completed
                       ? 'bg-base/90 border-primary/25'
                       : 'bg-base/60 border-line/8 hover:border-line/20'

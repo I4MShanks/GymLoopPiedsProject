@@ -154,7 +154,7 @@ export const OwnerDashboard: React.FC<OwnerDashboardProps> = ({
                   onClick={() => setActiveTab(item.id)}
                   className={`min-h-[42px] px-3.5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
                     active
-                      ? 'bg-primary text-onbright shadow-[0_0_20px_rgba(0,180,216,0.22)]'
+                      ? 'bg-primary text-onbright shadow-[0_0_20px_rgba(255,214,0,0.22)]'
                       : 'text-ink-3 hover:bg-line/6 hover:text-ink'
                   }`}
                 >

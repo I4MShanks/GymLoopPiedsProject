@@ -186,7 +186,7 @@ export const LiveCrowd: React.FC<LiveCrowdProps> = ({
                   <div
                     className={`w-full rounded-t-xl transition-all duration-200 ${
                       point.isNow
-                        ? 'ring-2 ring-white shadow-[0_0_20px_rgba(0,180,216,0.45)]'
+                        ? 'ring-2 ring-white shadow-[0_0_20px_rgba(255,214,0,0.45)]'
                         : isSelected
                           ? 'opacity-100 ring-1 ring-line/60'
                           : 'opacity-70 group-hover:opacity-100'

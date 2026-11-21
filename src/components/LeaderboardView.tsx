@@ -96,7 +96,7 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({
                 <span className="text-xs font-bold text-t-coin mb-2 truncate max-w-full">
                   {first.name}
                 </span>
-                <div className="w-full h-32 rounded-t-2xl bg-coin text-onbright flex flex-col items-center justify-center p-2 shadow-[0_0_24px_rgba(144,224,239,0.3)]">
+                <div className="w-full h-32 rounded-t-2xl bg-coin text-onbright flex flex-col items-center justify-center p-2 shadow-[0_0_24px_rgba(255,184,82,0.3)]">
                   <span className="font-display text-3xl tabular-nums">1</span>
                   <span className="font-mono text-xs font-bold tabular-nums">
                     {getScore(first)} pts
@@ -135,7 +135,7 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({
                   key={member.id}
                   className={`min-h-[54px] px-4 py-3 rounded-2xl flex items-center justify-between gap-3 border ${
                     member.isYou
-                      ? 'bg-primary/12 border-primary shadow-[0_0_18px_rgba(0,180,216,0.16)]'
+                      ? 'bg-primary/12 border-primary shadow-[0_0_18px_rgba(255,214,0,0.16)]'
                       : 'bg-base border-line/8'
                   }`}
                 >

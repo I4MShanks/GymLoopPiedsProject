@@ -105,7 +105,7 @@ export const LootAndProfile: React.FC<LootAndProfileProps> = ({
                     item.unlocked
                       ? 'bg-tint border-primary/70'
                       : isActiveTrack || isSelected
-                        ? 'bg-raised border-accent shadow-[0_0_20px_rgba(0,119,182,0.18)]'
+                        ? 'bg-raised border-accent shadow-[0_0_20px_rgba(255,46,46,0.18)]'
                         : 'bg-base border-line/10 hover:border-line/25'
                   }`}
                 >
@@ -235,7 +235,7 @@ export const LootAndProfile: React.FC<LootAndProfileProps> = ({
                   title={item.name}
                   className={`aspect-square rounded-2xl flex flex-col items-center justify-center border transition-all ${
                     item.unlocked
-                      ? 'bg-tint border-primary shadow-[0_0_16px_rgba(0,180,216,0.2)]'
+                      ? 'bg-tint border-primary shadow-[0_0_16px_rgba(255,214,0,0.2)]'
                       : 'bg-void border-line/10 opacity-45'
                   }`}
                 >
